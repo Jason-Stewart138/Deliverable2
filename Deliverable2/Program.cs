@@ -103,8 +103,17 @@
                             StartOverCase = 0;
                             AddPadding(Padding);
                             GuestSelection = "none";
+                            ChooseBeverage = true;
+
                         }
                         Console.ForegroundColor = ConsoleColor.White;
+
+                        if (GuestSelection == "none")
+                        {
+                            GuestSelection = GuestSelection;
+                        }
+                        else
+                        {
                             GuestSelection = Console.ReadLine();
 
                             //Handle User Capitalization Variance//
@@ -123,116 +132,118 @@
                                     GuestSelection = GuestSelection;
                                     break;
                             }
-                        
-                        if (GuestSelection == "water" || GuestSelection == "softdrink" || GuestSelection == "none")
-                        {
-                            //Do Not Print To Console || Perform Calculations In Current Loop Iteration If GuestSelection == "none"//
-                            if (GuestSelection != "none")
+
+                            if (GuestSelection == "water" || GuestSelection == "softdrink" || GuestSelection == "none")
                             {
-                                Console.ForegroundColor = ConsoleColor.Magenta;
-                                Console.WriteLine(GuestSelection + ", you got it!");
-                                AddPadding(Padding);
-                                Console.ForegroundColor = ConsoleColor.White;
-
-                                //Set ChooseBeverage == true To Exit For Loop Iteration//
-                                ChooseBeverage = true;
-
-                                //Update Running Totals Of Water && Softdrinks Ordered//
-                                if (GuestSelection == "water")
+                                //Do Not Print To Console || Perform Calculations In Current Loop Iteration If GuestSelection == "none"//
+                                if (GuestSelection != "none")
                                 {
-                                    WaterTotal ++;
+                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.WriteLine(GuestSelection + ", you got it!");
+                                    AddPadding(Padding);
+                                    Console.ForegroundColor = ConsoleColor.White;
+
+                                    //Set ChooseBeverage == true To Exit For Loop Iteration//
+                                    ChooseBeverage = true;
+
+                                    //Update Running Totals Of Water && Softdrinks Ordered//
+                                    if (GuestSelection == "water")
+                                    {
+                                        WaterTotal++;
+                                    }
+                                    else if (GuestSelection == "softdrink")
+                                    {
+                                        SoftDrinkTotal++;
+                                    }
                                 }
-                                else if (GuestSelection == "softdrink")
-                                {
-                                    SoftDrinkTotal ++;
-                                }
-                            }
-                        }
-                        else
-                        //Allow User To Modify Selection If Invalid//
-                        {
-                            Console.WriteLine("Sorry we don't have that selection, would you like something else or nothing to drink? \n" +
-                                "Enter Yes or y to choose a different drink or any key to pass");
-                            AddPadding(Padding);
-
-                            string BeverageResponse = Console.ReadLine();
-
-                            //Handle User Capitalization Variance//
-                            BeverageResponse = BeverageResponse.ToLower();
-
-                            if (BeverageResponse == "yes" || BeverageResponse == "y")
-                            {
-                                ChooseBeverage = false;
-                                StartOverCase = 1;
                             }
                             else
+                            //Allow User To Modify Selection If Invalid//
                             {
-                                //Must Set ChooseBeverage == false So "none" Will Be Stored As A Valid Selection To Exit Current Loop Iteration//
-                                ChooseBeverage = false;
-                                StartOverCase = 2;
+                                Console.WriteLine("Sorry we don't have that selection, would you like something else or nothing to drink? \n" +
+                                    "Enter Yes or y to choose a different drink or any key to pass");
+                                AddPadding(Padding);
+
+                                string BeverageResponse = Console.ReadLine();
+
+                                //Handle User Capitalization Variance//
+                                BeverageResponse = BeverageResponse.ToLower();
+
+                                if (BeverageResponse == "yes" || BeverageResponse == "y")
+                                {
+                                    ChooseBeverage = false;
+                                    StartOverCase = 1;
+                                }
+                                else
+                                {
+                                    //Must Set ChooseBeverage == false So "none" Will Be Stored As A Valid Selection To Exit Current Loop Iteration//
+                                    ChooseBeverage = false;
+                                    StartOverCase = 2;
+                                }
                             }
+
                         }
 
                     }
-
                 }
             }
+
+            //Initiate Vars//
+            double BuffetCostPerPerson = 9.99;
+            double SoftDrinkCostPerDrink = 2.00;
+            double TotalBill = 0.00;
+            double TotalBuffetCost = 0.00;
+            double TotalSoftDrinkCost = 0.00;
+
+            //Calcualte Costs//
+            TotalBuffetCost = BuffetCostPerPerson * GuestCount;
+            TotalSoftDrinkCost = SoftDrinkCostPerDrink * SoftDrinkTotal;
+            TotalBill = TotalBuffetCost + TotalSoftDrinkCost;
+
+            //Present Total Bill//
+            Console.WriteLine("Thank you for dining at Greasy Jean's!");
+            AddPadding(Padding);
+            Console.WriteLine("Your total bill today is: $" + String.Format("{0:0.00}", TotalBill));
+            AddPadding(Padding);
+
+            //Write Detailed Receipt With Item Quantities && Line Item Totals//
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("--------------------------------------------------");
+            Console.WriteLine("Item            | Qty    | Cost Per   | Line Total");
+            Console.WriteLine("--------------------------------------------------");
+            Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Buffet", GuestCount, "$" + BuffetCostPerPerson, "$" + String.Format("{0:0.00}", TotalBuffetCost)));
+
+            //Do Not Show Line Items On Receipt If Zero Ordered//
+            if (SoftDrinkTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Softdrink", SoftDrinkTotal, "$" + String.Format("{0:0.00}", SoftDrinkCostPerDrink), "$" + String.Format("{0:0.00}", TotalSoftDrinkCost))); }
+            if (WaterTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Water", WaterTotal, "FREE!", "$0.00")); }
+
+            //Finish Building Receipt//
+            Console.WriteLine("--------------------------------------------------");
+            AddPadding(Padding);
+            Console.WriteLine("Total Bill ------------------------------$" + TotalBill);
+            AddPadding(Padding);
+            Console.WriteLine("------------------Add Gratuity--------------------");
+            Console.WriteLine("     5%    |    10%     |    15%     |    20%     ");
+            Console.WriteLine(string.Format("{0,-10} | {1,-10} | {2,-10} | {3,-10}",
+                    "  $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.05), 2)),
+                    " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.10), 2)),
+                    " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.15), 2)),
+                    " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.20), 2))));
+            Console.WriteLine("--------------------------------------------------");
+
+            //Thank Guests//
+            Console.ForegroundColor = ConsoleColor.White;
+            AddPadding(Padding);
+            Console.WriteLine("Thank You! \n" + "Have a nice day!");
         }
-        //Initiate Vars//
-        const double BuffetCostPerPerson = 9.99;
-        double SoftDrinkCostPerDrink = 2.00;
-        double TotalBill = 0.00;
-        double TotalBuffetCost = 0.00;
-        double TotalSoftDrinkCost = 0.00;
-
-        //Calcualte Costs//
-        TotalBuffetCost = BuffetCostPerPerson * GuestCount;
-        TotalSoftDrinkCost = SoftDrinkCostPerDrink * SoftDrinkTotal;
-        TotalBill = TotalBuffetCost + TotalSoftDrinkCost;
-
-        //Present Total Bill//
-        Console.WriteLine("Thank you for dining at Greasy Jean's!");
-        AddPadding(Padding);
-        Console.WriteLine("Your total bill today is: $" + String.Format("{0:0.00}", TotalBill));
-        AddPadding(Padding);
-
-        //Write Detailed Receipt With Item Quantities && Line Item Totals//
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine("--------------------------------------------------");
-        Console.WriteLine("Item            | Qty    | Cost Per   | Line Total");
-        Console.WriteLine("--------------------------------------------------");
-        Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Buffet", GuestCount, "$" + BuffetCostPerPerson, "$" + String.Format("{0:0.00}", TotalBuffetCost)));
-
-        //Do Not Show Line Items On Receipt If Zero Ordered//
-        if (SoftDrinkTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Softdrink", SoftDrinkTotal, "$" + String.Format("{0:0.00}", SoftDrinkCostPerDrink), "$" + String.Format("{0:0.00}", TotalSoftDrinkCost))); }
-        if (WaterTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Water", WaterTotal, "FREE!", "$0.00")); }
-
-        //Finish Building Receipt//
-        Console.WriteLine("--------------------------------------------------");
-        AddPadding(Padding);
-        Console.WriteLine("Total Bill ------------------------------$" + TotalBill);
-        AddPadding(Padding);
-        Console.WriteLine("------------------Add Gratuity--------------------");
-        Console.WriteLine("     5%    |    10%     |    15%     |    20%     ");
-        Console.WriteLine(string.Format("{0,-10} | {1,-10} | {2,-10} | {3,-10}",
-                "  $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.05), 2)),
-                " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.10), 2)),
-                " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.15), 2)),
-                " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.20), 2))));
-        Console.WriteLine("--------------------------------------------------");
-
-        //Thank Guests//
-        Console.ForegroundColor = ConsoleColor.White;
-        AddPadding(Padding);
-        Console.WriteLine("Thank You! \n" + "Have a nice day!");
-
+        
     }
 
-    //Helper Method, Call To Add Space Between Console Lines//
+ //Helper Method, Call To Add Space Between Console Lines//
     private static void AddPadding(string Padding)
     {
         Console.WriteLine(Padding);
     }
-
+    
 }
 
