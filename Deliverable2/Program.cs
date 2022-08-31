@@ -4,17 +4,15 @@
     public static void Main(string[] args)
     {
         // Set Variables: Guest Limit == 6, Buffet Cost == $9.99, water == Free, Softdrink == $2.00//
-        int GuestCount = 0;
         double SoftDrinkTotal = 0;
         double WaterTotal = 0;
         bool ReEnterGroupSize = false;
-        bool DoNotRunReceipt = false;
         string Padding = "    ";
 
         //Welcome Guests//
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine("Welcome to Greasy Jean's All You Can Eat Food Trough!");
-        Console.WriteLine("This all you can eat experiance only costs $9.99 per guest!");
+        Console.WriteLine("This all you can eat experience only costs $9.99 per guest!");
         Console.WriteLine("Here at Greasy Jean's water is always free or upgrade to a 32oz softdrink for just $2.00!");
         AddPadding(Padding);
 
@@ -28,7 +26,7 @@
         //Get Number Of Guests In The Group//
 
         Console.WriteLine("How many guests are in your party?");
-        GuestCount = int.Parse(Console.ReadLine());
+        var GuestCount = int.Parse(Console.ReadLine());
 
         //Do Not Continue Until Valid Group Size Is Entered//
         while (!ReEnterGroupSize)
@@ -40,7 +38,7 @@
                 AddPadding(Padding);
 
                 //Give User Chance To Adjust Group Size || Leave//
-                Console.WriteLine("Would you like to adjust your party size or find a different resturant? \n" + "Please enter Yes or y to adjust your party size or press any other key to leave");
+                Console.WriteLine("Would you like to adjust your party size or find a different restaurant? \n" + "Please enter Yes or y to adjust your party size or press any other key to leave");
                 AddPadding(Padding);
 
                 string GroupResponse = Console.ReadLine();
@@ -59,7 +57,7 @@
                 {
                     Console.WriteLine("Sorry You Are Leaving, Please Stop By Again. \n" + "Have a nice day!");
                     ReEnterGroupSize = true;
-                    DoNotRunReceipt = true;
+                    return;
                 }
             }
             else
@@ -86,7 +84,7 @@
                         */
                         Console.ForegroundColor = ConsoleColor.Green;
                         if (StartOverCase == 0)
-                            
+
                         {
                             Console.WriteLine("Alright Guest " + i + ", would you like water or a softdrink? \n" +
                                             "(You can type w or s for faster service)");
@@ -107,13 +105,6 @@
                             GuestSelection = "none";
                         }
                         Console.ForegroundColor = ConsoleColor.White;
-
-                        if (GuestSelection == "none")
-                        {
-                            GuestSelection = GuestSelection;
-                        }
-                        else
-                        {
                             GuestSelection = Console.ReadLine();
 
                             //Handle User Capitalization Variance//
@@ -132,11 +123,11 @@
                                     GuestSelection = GuestSelection;
                                     break;
                             }
-                        }
+                        
                         if (GuestSelection == "water" || GuestSelection == "softdrink" || GuestSelection == "none")
                         {
                             //Do Not Print To Console || Perform Calculations In Current Loop Iteration If GuestSelection == "none"//
-                            if (GuestSelection != "none") 
+                            if (GuestSelection != "none")
                             {
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                                 Console.WriteLine(GuestSelection + ", you got it!");
@@ -149,11 +140,11 @@
                                 //Update Running Totals Of Water && Softdrinks Ordered//
                                 if (GuestSelection == "water")
                                 {
-                                    WaterTotal = WaterTotal + 1;
+                                    WaterTotal ++;
                                 }
                                 else if (GuestSelection == "softdrink")
                                 {
-                                    SoftDrinkTotal = SoftDrinkTotal + 1;
+                                    SoftDrinkTotal ++;
                                 }
                             }
                         }
@@ -187,64 +178,61 @@
                 }
             }
         }
-        //Do Not Generate A Receipt If Group Left Buffet//
-        if (!DoNotRunReceipt)
-        {
-            //Initiate Vars//
-            double BuffetCostPerPerson = 9.99;
-            double SoftDrinkCostPerDrink = 2.00;
-            double TotalBill = 0.00;
-            double TotalBuffetCost = 0.00;
-            double TotalSoftDrinkCost = 0.00;
+        //Initiate Vars//
+        const double BuffetCostPerPerson = 9.99;
+        double SoftDrinkCostPerDrink = 2.00;
+        double TotalBill = 0.00;
+        double TotalBuffetCost = 0.00;
+        double TotalSoftDrinkCost = 0.00;
 
-            //Calcualte Costs//
-            TotalBuffetCost = BuffetCostPerPerson * GuestCount;
-            TotalSoftDrinkCost = SoftDrinkCostPerDrink * SoftDrinkTotal;
-            TotalBill = TotalBuffetCost + TotalSoftDrinkCost;
+        //Calcualte Costs//
+        TotalBuffetCost = BuffetCostPerPerson * GuestCount;
+        TotalSoftDrinkCost = SoftDrinkCostPerDrink * SoftDrinkTotal;
+        TotalBill = TotalBuffetCost + TotalSoftDrinkCost;
 
-            //Present Total Bill//
-            Console.WriteLine("Thank you for dining at Greasy Jean's!");
-            AddPadding(Padding);
-            Console.WriteLine("Your total bill today is: $" + String.Format("{0:0.00}", TotalBill));
-            AddPadding(Padding);
+        //Present Total Bill//
+        Console.WriteLine("Thank you for dining at Greasy Jean's!");
+        AddPadding(Padding);
+        Console.WriteLine("Your total bill today is: $" + String.Format("{0:0.00}", TotalBill));
+        AddPadding(Padding);
 
-            //Write Detailed Receipt With Item Quantities && Line Item Totals//
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("--------------------------------------------------");
-            Console.WriteLine("Item            | Qty    | Cost Per   | Line Total");
-            Console.WriteLine("--------------------------------------------------");
-            Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Buffet", GuestCount, "$" + BuffetCostPerPerson, "$" + String.Format("{0:0.00}", TotalBuffetCost)));
+        //Write Detailed Receipt With Item Quantities && Line Item Totals//
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("--------------------------------------------------");
+        Console.WriteLine("Item            | Qty    | Cost Per   | Line Total");
+        Console.WriteLine("--------------------------------------------------");
+        Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Buffet", GuestCount, "$" + BuffetCostPerPerson, "$" + String.Format("{0:0.00}", TotalBuffetCost)));
 
-            //Do Not Show Line Items On Receipt If Zero Ordered//
-            if (SoftDrinkTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Softdrink", SoftDrinkTotal, "$" + String.Format("{0:0.00}", SoftDrinkCostPerDrink), "$" + String.Format("{0:0.00}", TotalSoftDrinkCost))); }
-            if (WaterTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Water", WaterTotal, "FREE!", "$0.00")); }
+        //Do Not Show Line Items On Receipt If Zero Ordered//
+        if (SoftDrinkTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Softdrink", SoftDrinkTotal, "$" + String.Format("{0:0.00}", SoftDrinkCostPerDrink), "$" + String.Format("{0:0.00}", TotalSoftDrinkCost))); }
+        if (WaterTotal > 0) { Console.WriteLine(string.Format("{0,-15} | {1,-6} | {2,-10} | {3,-10}", "Water", WaterTotal, "FREE!", "$0.00")); }
 
-            //Finish Building Receipt//
-            Console.WriteLine("--------------------------------------------------");
-            AddPadding(Padding);
-            Console.WriteLine("Total Bill ------------------------------$" + TotalBill);
-            AddPadding(Padding);
-            Console.WriteLine("------------------Add Gratuity--------------------");
-            Console.WriteLine("     5%    |    10%     |    15%     |    20%     ");
-            Console.WriteLine(string.Format("{0,-10} | {1,-10} | {2,-10} | {3,-10}",
-                    "  $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.05), 2)),
-                    " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.10), 2)),
-                    " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.15), 2)),
-                    " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.20), 2))));
-            Console.WriteLine("--------------------------------------------------");
+        //Finish Building Receipt//
+        Console.WriteLine("--------------------------------------------------");
+        AddPadding(Padding);
+        Console.WriteLine("Total Bill ------------------------------$" + TotalBill);
+        AddPadding(Padding);
+        Console.WriteLine("------------------Add Gratuity--------------------");
+        Console.WriteLine("     5%    |    10%     |    15%     |    20%     ");
+        Console.WriteLine(string.Format("{0,-10} | {1,-10} | {2,-10} | {3,-10}",
+                "  $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.05), 2)),
+                " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.10), 2)),
+                " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.15), 2)),
+                " $" + String.Format("{0:0.00}", Math.Round((TotalBuffetCost * 1.20), 2))));
+        Console.WriteLine("--------------------------------------------------");
 
-            //Thank Guests//
-            Console.ForegroundColor = ConsoleColor.White;
-            AddPadding(Padding);
-            Console.WriteLine("Thank You! \n" + "Have a nice day!");
-        }
+        //Thank Guests//
+        Console.ForegroundColor = ConsoleColor.White;
+        AddPadding(Padding);
+        Console.WriteLine("Thank You! \n" + "Have a nice day!");
+
     }
 
- //Helper Method, Call To Add Space Between Console Lines//
+    //Helper Method, Call To Add Space Between Console Lines//
     private static void AddPadding(string Padding)
     {
         Console.WriteLine(Padding);
     }
-    
+
 }
 
